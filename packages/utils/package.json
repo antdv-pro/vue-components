@@ -1,7 +1,7 @@
 {
   "name": "@v-c/utils",
   "version": "0.0.1",
-  "description": "",
+  "description": "vue components utils",
   "keywords": [
     "vc-utils",
     "vue3",
