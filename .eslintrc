@@ -1,0 +1,6 @@
+{
+    "extends":"@mistjs/eslint-config-vue",
+    "rules": {
+        "quote-props": ["error", "as-needed"]
+    }
+}
