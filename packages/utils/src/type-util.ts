@@ -3,42 +3,42 @@ import type { PropType, VNodeChild } from 'vue'
 export function stringType<T extends string = string>(defaultVal?: T) {
   return {
     type: String as unknown as PropType<T>,
-    defaultVal: defaultVal as T,
+    default: defaultVal as T,
   }
 }
 
 export function numberType<T extends number = number>(defaultVal?: T) {
   return {
     type: Number as unknown as PropType<T>,
-    defaultVal: defaultVal as T,
+    default: defaultVal as T,
   }
 }
 
 export function booleanType<T extends boolean = boolean>(defaultVal?: T) {
   return {
     type: Boolean as unknown as PropType<T>,
-    defaultVal: defaultVal as T,
+    default: defaultVal as T,
   }
 }
 
 export function arrayType<T extends any[] = any[]>(defaultVal?: T) {
   return {
     type: Array as unknown as PropType<T>,
-    defaultVal: defaultVal as T,
+    default: defaultVal as T,
   }
 }
 
 export function objectType<T extends Record<string, any> = Record<string, any>>(defaultVal?: T) {
   return {
     type: Object as unknown as PropType<T>,
-    defaultVal: defaultVal as T,
+    default: defaultVal as T,
   }
 }
 
 export function functionType<T extends () => any = () => any>(defaultVal?: T) {
   return {
     type: Function as unknown as PropType<T>,
-    defaultVal: defaultVal as T,
+    default: defaultVal as T,
   }
 }
 
