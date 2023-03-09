@@ -1,0 +1,25 @@
+{
+  "name": "@v-c/checkbox",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "homepage": "https://github.com/antd-tiny-vue/vue-components",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:antd-tiny-vue/vue-components.git"
+  },
+  "bugs": {
+    "url": "https://github.com/antd-tiny-vue/vue-components/issues"
+  },
+  "author": "aibayanyu",
+  "license": "MIT",
+  "keywords": [],
+  "devDependencies": {
+    "classnames": "^2.3.2",
+    "vue": "^3.2.47",
+    "@v-c/utils": "workspace:^"
+  }
+}
