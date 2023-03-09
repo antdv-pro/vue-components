@@ -27,12 +27,6 @@ importers:
       lodash-es: 4.17.21
       tsup: 6.6.3
 
-  packages/vc-utils:
-    specifiers:
-      tsup: ^6.6.3
-    devDependencies:
-      tsup: 6.6.3
-
 packages:
 
   /@babel/code-frame/7.18.6:
