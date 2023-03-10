@@ -45,6 +45,16 @@ importers:
       classnames: 2.3.2
       vue: 3.2.47
 
+  packages/notification:
+    specifiers:
+      '@v-c/utils': workspace:^
+      classnames: ^2.3.2
+      vue: ^3.2.47
+    devDependencies:
+      '@v-c/utils': link:../utils
+      classnames: 2.3.2
+      vue: 3.2.47
+
   packages/utils:
     specifiers:
       '@types/lodash.clonedeep': ^4.5.7
@@ -52,10 +62,10 @@ importers:
       tsup: ^6.6.3
       vue: ^3.2.47
     dependencies:
+      lodash.clonedeep: 4.5.0
       vue: 3.2.47
     devDependencies:
       '@types/lodash.clonedeep': 4.5.7
-      lodash.clonedeep: 4.5.0
       tsup: 6.6.3
 
 packages:
@@ -71,6 +81,9 @@ packages:
     peerDependencies:
       '@algolia/client-search': '>= 4.9.1 < 6'
       algoliasearch: '>= 4.9.1 < 6'
+    peerDependenciesMeta:
+      '@algolia/client-search':
+        optional: true
     dependencies:
       '@algolia/autocomplete-shared': 1.7.4
       algoliasearch: 4.15.0
@@ -2943,7 +2956,7 @@ packages:
 
   /lodash.clonedeep/4.5.0:
     resolution: {integrity: sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ==}
-    dev: true
+    dev: false
 
   /lodash.merge/4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}

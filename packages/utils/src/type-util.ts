@@ -1,5 +1,6 @@
 import type { PropType, VNodeChild } from 'vue'
 
+export type vueNode = VNodeChild | string | number | boolean | null | undefined
 export function stringType<T extends string = string>(defaultVal?: T) {
   return {
     type: String as unknown as PropType<T>,
@@ -56,7 +57,7 @@ export function anyType<T = any>(defaultVal?: T, required?: boolean) {
       })
 }
 
-export function vNodeType<T = VNodeChild>() {
+export function vNodeType<T = vueNode>() {
   return { validator: () => true } as unknown as { type: PropType<T> }
 }
 
@@ -65,5 +66,5 @@ export function someType<T>(types?: any[], defaultVal?: T) {
 }
 
 export function eventType<T>() {
-  return { type: [Function, Array] as PropType<T | T[]> }
+  return { type: [Function, Array] as PropType<T> }
 }
