@@ -1,0 +1,10 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@v-c/checkbox": ["../packages/checkbox/src"],
+            "@v-c/utils": ["../packages/checkbox/src"],
+        }
+    },
+}
