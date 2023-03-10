@@ -38,11 +38,11 @@
   "author": "aibayanyu",
   "license": "MIT",
   "devDependencies": {
-    "@types/lodash-es": "^4.17.6",
-    "lodash-es": "^4.17.21",
+    "@types/lodash.clonedeep": "^4.5.7",
     "tsup": "^6.6.3"
   },
   "dependencies": {
-    "vue": "^3.2.47"
+    "vue": "^3.2.47",
+    "lodash.clonedeep": "^4.5.0"
   }
 }

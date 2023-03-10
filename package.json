@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "pnpm -F example docs:dev"
   },
   "keywords": [],
   "author": "",
@@ -14,5 +14,12 @@
     "@mistjs/tsconfig-vue": "^0.0.3",
     "eslint": "^8.35.0",
     "typescript": "^4.9.5"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "@algolia/client-search"
+      ]
+    }
   }
 }

@@ -4,6 +4,7 @@ export const isBoolean = (val: unknown): val is boolean => typeof val === 'boole
 export const isFunction = (val: unknown): val is Function => typeof val === 'function'
 export const isArray = (val: unknown): val is any[] => Array.isArray(val)
 export const isUndefined = (val: unknown): val is undefined => typeof val === 'undefined'
+export const isDef = <T = any>(val?: T): val is T => typeof val !== 'undefined'
 export const isNull = (val: unknown): val is null => val === null
 export const isSymbol = (val: unknown): val is symbol => typeof val === 'symbol'
 export const isObject = (val: unknown): val is Record<any, any> => Object.prototype.toString.call(val) === '[object Object]'

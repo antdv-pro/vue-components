@@ -6,5 +6,5 @@ export default defineConfig({
   dts: {
     resolve: true,
   },
-  external: ['vue'],
+  external: ['vue', 'lodash.clonedeep'],
 })
