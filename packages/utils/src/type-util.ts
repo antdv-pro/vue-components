@@ -68,3 +68,25 @@ export function someType<T>(types?: any[], defaultVal?: T) {
 export function eventType<T>() {
   return { type: [Function, Array] as PropType<T> }
 }
+
+export function runEvent<T>(event: T, ...args: any[]) {
+  if (typeof event === 'function')
+    return event(...args)
+
+  else if (Array.isArray(event))
+    return event.map(e => e(...args))
+}
+
+export async function runAsyncEvent<T>(event: T, ...args: any[]) {
+  if (typeof event === 'function')
+    return await event(...args)
+
+  else if (Array.isArray(event))
+    return await Promise.all(event.map(e => e(...args)))
+}
+
+export function getEventValue<T = any>(result: any, index = 0): T {
+  if (Array.isArray(result))
+    return result[index] as T
+  return result as T
+}
