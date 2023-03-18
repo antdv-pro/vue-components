@@ -7,9 +7,9 @@ export const delayTimer = async (delay = 0) => {
     }, delay)
   })
 }
-export function safeNextTick(fn?: () => void, option?: { delay: 0 }): void
-export async function safeNextTick(fn?: () => void, option?: { delay: 0 }): Promise<void>
-export async function safeNextTick(fn?: () => void, option?: { delay: 0 }) {
+export function safeNextick(fn?: () => void, option?: { delay: 0 }): void
+export async function safeNextick(fn?: () => void, option?: { delay: 0 }): Promise<void>
+export async function safeNextick(fn?: () => void, option?: { delay: 0 }) {
   if (fn && isFunction(fn)) {
     await delayTimer(option?.delay)
     fn()
