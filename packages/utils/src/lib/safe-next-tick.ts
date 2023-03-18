@@ -2,16 +2,16 @@ import { isFunction } from '../base'
 
 export const delayTimer = async (delay = 0) => {
   return new Promise((resolve) => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       resolve(true)
+      clearTimeout(timer)
     }, delay)
   })
 }
 export function safeNextick(fn?: () => void, option?: { delay: 0 }): void
 export async function safeNextick(fn?: () => void, option?: { delay: 0 }): Promise<void>
 export async function safeNextick(fn?: () => void, option?: { delay: 0 }) {
-  if (fn && isFunction(fn)) {
-    await delayTimer(option?.delay)
+  await delayTimer(option?.delay)
+  if (fn && isFunction(fn))
     fn()
-  }
 }
