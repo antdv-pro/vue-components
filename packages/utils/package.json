@@ -39,10 +39,11 @@
   "license": "MIT",
   "devDependencies": {
     "@types/lodash.clonedeep": "^4.5.7",
+    "@types/node": "^18.15.0",
     "tsup": "^6.6.3"
   },
   "dependencies": {
-    "vue": "^3.2.47",
-    "lodash.clonedeep": "^4.5.0"
+    "lodash.clonedeep": "^4.5.0",
+    "vue": "^3.2.47"
   }
 }
