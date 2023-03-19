@@ -36,3 +36,12 @@ export function omit<T, K extends keyof T, R extends Record<string, any>>(object
   })
   return Object.assign(omitedObject, rest)
 }
+
+export const isUrl = (val: string): boolean => {
+  const reg = /^(https?|mailto|tel|file):/
+  return reg.test(val)
+}
+
+export const tupleArr = <T extends string[]>(...args: T) => args
+
+export const tupleNumArr = <T extends number[]>(...args: T) => args
