@@ -32,7 +32,7 @@ function getStyleValue(node: any, type: any, value: any) {
   return removePixel[type] ? (parseFloat(value) || 0) : value
 }
 
-export function get(node: any, name: any) {
+export function getCss(node: any, name: any) {
   const length = arguments.length
   const style = getComputedStyle(node)
 
@@ -41,7 +41,7 @@ export function get(node: any, name: any) {
   return (length === 1) ? style : getStyleValue(node, name, style[name] || node.style[name])
 }
 
-export function set(node: any, name: any, value: any) {
+export function setCss(node: any, name: any, value: any) {
   const length = arguments.length
   name = floatMap[name] ? 'cssFloat' in node.style ? 'cssFloat' : 'styleFloat' : name
   if (length === 3) {
@@ -52,8 +52,9 @@ export function set(node: any, name: any, value: any) {
     return value
   }
   for (const x in name) {
+    // eslint-disable-next-line no-prototype-builtins
     if (name.hasOwnProperty(x))
-      set(node, x, name[x])
+      setCss(node, x, name[x])
   }
   return getComputedStyle(node)
 }
