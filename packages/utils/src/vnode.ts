@@ -1,5 +1,5 @@
-import type { Slot, VNode, VNodeChild } from 'vue'
-import { Fragment } from 'vue'
+import type { ComponentPublicInstance, SetupContext, Slot, VNode, VNodeChild } from 'vue'
+import { Fragment, vShow } from 'vue'
 import { isFunction } from './base'
 
 export const getSlotsProps = <S extends object, P extends object, K extends keyof S, KP extends keyof P>(slots: S, props: P, key: K | KP, ...args: any[]) => {
@@ -35,4 +35,20 @@ export function filterEmpty(children: VNodeChild[] = []) {
       res.push(child)
   })
   return res.filter(c => !isEmptyElement(c as VNode))
+}
+
+export function isNodeVShowFalse(vNode: VNode): boolean {
+  const showDir = vNode.dirs?.find(({ dir }) => dir === vShow)
+  return !!(showDir && showDir.value === false)
+}
+
+export function getSlot(
+  instance: ComponentPublicInstance | SetupContext<any>,
+  slotName = 'default',
+  fallback: VNodeChild[] = [],
+): VNodeChild[] {
+  const slots = (instance as ComponentPublicInstance)?.$slots || (instance as SetupContext).slots || {}
+  const slot = slots[slotName]
+  if (slot === undefined) return fallback
+  return slot()
 }
