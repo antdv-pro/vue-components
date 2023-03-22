@@ -58,15 +58,23 @@ importers:
   packages/utils:
     specifiers:
       '@types/lodash.clonedeep': ^4.5.7
+      '@types/lodash.isequal': ^4.5.6
+      '@types/lodash.merge': ^4.6.7
       '@types/node': ^18.15.0
       lodash.clonedeep: ^4.5.0
+      lodash.isequal: ^4.5.0
+      lodash.merge: ^4.6.2
       tsup: ^6.6.3
       vue: ^3.2.47
     dependencies:
       lodash.clonedeep: 4.5.0
+      lodash.isequal: 4.5.0
+      lodash.merge: 4.6.2
       vue: 3.2.47
     devDependencies:
       '@types/lodash.clonedeep': 4.5.7
+      '@types/lodash.isequal': 4.5.6
+      '@types/lodash.merge': 4.6.7
       '@types/node': 18.15.0
       tsup: 6.6.3
 
@@ -1096,6 +1104,18 @@ packages:
 
   /@types/lodash.clonedeep/4.5.7:
     resolution: {integrity: sha512-ccNqkPptFIXrpVqUECi60/DFxjNKsfoQxSQsgcBJCX/fuX1wgyQieojkcWH/KpE3xzLoWN/2k+ZeGqIN3paSvw==}
+    dependencies:
+      '@types/lodash': 4.14.191
+    dev: true
+
+  /@types/lodash.isequal/4.5.6:
+    resolution: {integrity: sha512-Ww4UGSe3DmtvLLJm2F16hDwEQSv7U0Rr8SujLUA2wHI2D2dm8kPu6Et+/y303LfjTIwSBKXB/YTUcAKpem/XEg==}
+    dependencies:
+      '@types/lodash': 4.14.191
+    dev: true
+
+  /@types/lodash.merge/4.6.7:
+    resolution: {integrity: sha512-OwxUJ9E50gw3LnAefSHJPHaBLGEKmQBQ7CZe/xflHkyy/wH2zVyEIAKReHvVrrn7zKdF58p16We9kMfh7v0RRQ==}
     dependencies:
       '@types/lodash': 4.14.191
     dev: true
@@ -2960,9 +2980,12 @@ packages:
     resolution: {integrity: sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ==}
     dev: false
 
+  /lodash.isequal/4.5.0:
+    resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
+    dev: false
+
   /lodash.merge/4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
-    dev: true
 
   /lodash.sortby/4.7.0:
     resolution: {integrity: sha512-HDWXG8isMntAyRF5vZ7xKuEvOhT4AhlRt/3czTSjvGUxjYCBVRQY48ViDHyfYz9VIoBkW4TMGQNapx+l3RUwdA==}
