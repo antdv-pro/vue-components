@@ -1,6 +1,5 @@
-import { defineComponent, onBeforeUnmount, shallowRef, watchEffect } from 'vue'
-import { KeyCode, anyType, booleanType, eventType, numberType, stringType, vNodeType } from '@v-c/utils'
-import classNames from 'classnames'
+import { Teleport, defineComponent, onBeforeUnmount, shallowRef, watchPostEffect } from 'vue'
+import { KeyCode, anyType, booleanType, classNames, eventType, numberType, stringType, vNodeType } from '@v-c/utils'
 const noticeProps = {
   content: vNodeType(),
   duration: numberType(4.5),
@@ -12,6 +11,7 @@ const noticeProps = {
   eventKey: anyType(),
   onNoticeClose: eventType<(key: any) => void>(),
   times: numberType(),
+  holder: anyType<HTMLDivElement>(),
 }
 const notice = defineComponent({
   name: 'Notice',
@@ -34,7 +34,7 @@ const notice = defineComponent({
         onInternalClose()
     }
     let timeout: any
-    watchEffect(() => {
+    watchPostEffect(() => {
       if (props.times) {
         // TODO
       }
@@ -55,10 +55,11 @@ const notice = defineComponent({
         closable,
         closeIcon = 'x',
         onClick,
+        holder,
       } = props
       const noticePrefixCls = `${prefixCls}-notice`
 
-      return (
+      const node = (
           <div
               class={classNames(noticePrefixCls, (attrs as any).class, {
                 [`${noticePrefixCls}-closable`]: closable,
@@ -91,6 +92,10 @@ const notice = defineComponent({
             )}
           </div>
       )
+
+      if (holder)
+        return <Teleport to={holder}> { node }</Teleport>
+      return node
     }
   },
 })

@@ -1,12 +1,11 @@
-import { booleanType, someType, stringType } from '@v-c/utils'
-import classNames from 'classnames'
+import { anyType, booleanType, classNames, someType, stringType } from '@v-c/utils'
 import type { ExtractPropTypes, HTMLAttributes } from 'vue'
 import { defineComponent, ref, watch } from 'vue'
 
 export const checkboxProps = {
   checked: booleanType(),
   defaultChecked: booleanType(false),
-  prefixCls: stringType('vc-checkbox'),
+  prefixCls: stringType('rc-checkbox'),
   type: stringType('checkbox'),
   disabled: booleanType(),
   required: booleanType(),
@@ -14,6 +13,8 @@ export const checkboxProps = {
   id: stringType(),
   name: stringType(),
   autofocus: booleanType(),
+  value: anyType(),
+  readonly: booleanType(),
 }
 
 export type CheckboxProps = ExtractPropTypes<typeof checkboxProps>
@@ -43,7 +44,7 @@ const Checkbox = defineComponent({
       },
     })
     const eventShiftKey = ref()
-    const handleChange = (e) => {
+    const handleChange = (e: any) => {
       if (props.disabled)
         return
 
@@ -67,7 +68,7 @@ const Checkbox = defineComponent({
 
       // fix https://github.com/vueComponent/ant-design-vue/issues/3047
       // 受控模式下维持现有状态
-      if (props.checked !== undefined)
+      if (props.checked !== undefined && inputRef.value)
         inputRef.value.checked = !!props.checked
 
       emit('change', eventObj)
@@ -102,8 +103,10 @@ const Checkbox = defineComponent({
       } = attrs as HTMLAttributes
       const othersAndAttrs = { ...others, ...attrs }
       const globalProps = Object.keys(othersAndAttrs).reduce((prev, key) => {
-        if (key.startsWith('data-') || key.startsWith('aria-') || key === 'role')
+        if (key.startsWith('data-') || key.startsWith('aria-') || key === 'role') {
+          // @ts-expect-error this is defined in the if statement
           prev[key] = othersAndAttrs[key]
+        }
 
         return prev
       }, {})
