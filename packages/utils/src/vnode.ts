@@ -1,5 +1,5 @@
 import type { ComponentPublicInstance, SetupContext, Slot, VNode, VNodeChild } from 'vue'
-import { Fragment, vShow } from 'vue'
+import { Comment, Fragment, Text, vShow } from 'vue'
 import { isFunction } from './base'
 
 export const getSlotsProps = <S extends object, P extends object, K extends keyof S, KP extends keyof P>(slots: S, props: P, key: K | KP, ...args: any[]) => {
