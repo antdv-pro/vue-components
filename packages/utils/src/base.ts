@@ -45,3 +45,7 @@ export const isUrl = (val: string): boolean => {
 export const tupleArr = <T extends string[]>(...args: T) => args
 
 export const tupleNumArr = <T extends number[]>(...args: T) => args
+
+export const toArray = <T>(val: T): T[] => {
+  return isArray(val) ? val : [val]
+}
