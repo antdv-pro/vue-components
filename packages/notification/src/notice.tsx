@@ -1,11 +1,23 @@
+import type { ExtractPropTypes } from 'vue'
 import { Teleport, defineComponent, onBeforeUnmount, shallowRef, watchPostEffect } from 'vue'
-import { KeyCode, anyType, booleanType, classNames, eventType, numberType, stringType, vNodeType } from '@v-c/utils'
+import {
+  KeyCode,
+  anyType,
+  booleanType,
+  classNames,
+  eventType,
+  functionType,
+  numberType,
+  stringType,
+  vNodeType,
+} from '@v-c/utils'
+
 const noticeProps = {
   content: vNodeType(),
   duration: numberType(4.5),
   closable: booleanType(),
   closeIcon: vNodeType(),
-  // onClose: eventType(),
+  onClose: functionType(),
   onClick: eventType<((e: Event) => void)>(),
   prefixCls: stringType(),
   eventKey: anyType(),
@@ -13,6 +25,7 @@ const noticeProps = {
   times: numberType(),
   holder: anyType<HTMLDivElement>(),
 }
+export type NoticeConfig = Partial<ExtractPropTypes<typeof noticeProps>>
 const notice = defineComponent({
   name: 'Notice',
   props: {

@@ -1,5 +1,4 @@
-import { booleanType, someType, stringType, useVModel } from '@v-c/utils'
-import classNames from 'classnames'
+import { booleanType, classNames, someType, stringType, useVModel } from '@v-c/utils'
 import type { ExtractPropTypes } from 'vue'
 import { defineComponent, ref } from 'vue'
 

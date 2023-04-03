@@ -24,7 +24,7 @@ const Checkbox = defineComponent({
   props: {
     ...checkboxProps,
   },
-  emits: ['change', 'click'],
+  emits: ['change', 'click', 'update:value'],
   setup(props, { attrs, emit, expose }) {
     const checked = ref(props.checked === undefined ? props.defaultChecked : props.checked)
     const inputRef = ref<HTMLInputElement>()
@@ -72,6 +72,7 @@ const Checkbox = defineComponent({
         inputRef.value.checked = !!props.checked
 
       emit('change', eventObj)
+      emit('update:value', checked.value)
       eventShiftKey.value = false
     }
     const onClick = (e: MouseEvent) => {
