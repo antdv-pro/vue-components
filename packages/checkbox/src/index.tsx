@@ -5,7 +5,7 @@ import { defineComponent, ref, watch } from 'vue'
 export const checkboxProps = {
   checked: booleanType(),
   defaultChecked: booleanType(false),
-  prefixCls: stringType('rc-checkbox'),
+  prefixCls: stringType('vc-checkbox'),
   type: stringType('checkbox'),
   disabled: booleanType(),
   required: booleanType(),
