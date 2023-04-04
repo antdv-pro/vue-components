@@ -36,7 +36,7 @@ export function objectType<T extends Record<string, any> = Record<string, any>>(
   }
 }
 
-export function functionType<T extends () => any = () => any>(defaultVal?: T) {
+export function functionType<T = (() => any)>(defaultVal?: T) {
   return {
     type: Function as unknown as PropType<T>,
     default: defaultVal as T,
