@@ -16,7 +16,7 @@ export default defineConfig({
         text: 'Components',
         items: [
           { text: 'Checkbox', link: '/checkbox' },
-          { text: 'Runtime API Examples', link: '/api-examples' },
+          { text: 'Notification', link: '/notification' },
         ],
       },
     ],
