@@ -18,7 +18,7 @@
     "less": "^4.1.3",
     "typescript": "^4.9.5",
     "vite": "^4.2.1",
-    "vite-plugin-vitepress-demo": "2.0.0-alpha.8",
+    "vite-plugin-vitepress-demo": "2.0.0-beta.26",
     "vitepress": "1.0.0-alpha.51"
   },
   "dependencies": {

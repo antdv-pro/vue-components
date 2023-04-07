@@ -1,4 +1,5 @@
 export { default as findDomNode } from './find-dom-node'
+export { default as findDOMNode } from './find-dom-node'
 export { default as isVisible } from './is-visible'
 export { default as contains } from './contains'
 export { styleNames } from './style-names'

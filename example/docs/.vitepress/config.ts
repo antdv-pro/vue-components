@@ -17,6 +17,7 @@ export default defineConfig({
         items: [
           { text: 'Checkbox', link: '/checkbox' },
           { text: 'Notification', link: '/notification' },
+          { text: 'Motion', link: '/motion' },
         ],
       },
     ],

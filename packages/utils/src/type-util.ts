@@ -1,6 +1,8 @@
 import type { PropType, VNodeChild } from 'vue'
 
 export type vueNode = VNodeChild | string | number | boolean | null | undefined
+
+export type VueKey = string | number
 export function stringType<T extends string = string>(defaultVal?: T) {
   return {
     type: String as unknown as PropType<T>,

@@ -2,7 +2,7 @@ import { fileURLToPath } from 'url'
 import { resolve } from 'path'
 import { defineConfig } from 'vite'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import { VitePluginVitepressDemo } from 'vite-plugin-vitepress-demo'
+import VitePluginVitepressDemo from 'vite-plugin-vitepress-demo'
 const dir = fileURLToPath(new URL('.', import.meta.url))
 export default defineConfig({
   plugins: [
