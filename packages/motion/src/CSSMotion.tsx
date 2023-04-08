@@ -238,7 +238,8 @@ export function genCSSMotion(transitionSupport?: boolean) {
           class: [
             getTransitionName(motionName!, status),
             {
-              [getTransitionName(
+              [
+              (getTransitionName as any)(
                 motionName!,
                 `${status}-${statusSuffix!}`,
               )]: statusSuffix!,

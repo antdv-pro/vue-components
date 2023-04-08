@@ -2,9 +2,14 @@
   "name": "@v-c/checkbox",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.es.js",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "vite build"
   },
   "homepage": "https://github.com/antd-tiny-vue/vue-components",
   "repository": {

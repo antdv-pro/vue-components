@@ -1,8 +1,21 @@
-import { eventType, numberType, runEvent, someType, stringType, useState } from '@v-c/utils'
-import type { ExtractPropTypes, Ref, VNodeChild } from 'vue'
+import {
+  classNames,
+  eventType,
+  functionType,
+  isFunction,
+  numberType,
+  runEvent,
+  someType,
+  stringType,
+  useState,
+} from '@v-c/utils'
+import type { CSSProperties, ExtractPropTypes, Ref, VNodeChild } from 'vue'
 import { defineComponent, ref, shallowRef, watch } from 'vue'
+import type { CSSMotionProps } from '@v-c/motion'
+import { CSSMotionList } from '@v-c/motion'
 import type { NoticeConfig } from './notice'
-export type Key = string | number | Symbol
+import Notice from './notice'
+export type Key = string | number
 export type OpenConfig = NoticeConfig & {
   key: Key
   placement?: Placement
@@ -19,6 +32,9 @@ export const notificationProps = {
   container: someType<string | HTMLElement>([Object, String], 'body'),
   maxCount: numberType(),
   onAllRemoved: eventType(),
+  motion: someType<CSSMotionProps | ((placement: Placement) => CSSMotionProps)>([Object, Function]),
+  className: functionType<(placement: Placement) => string>(),
+  style: functionType<(placement: Placement) => CSSProperties>(),
 }
 
 export type NotificationProps = Partial<ExtractPropTypes<typeof notificationProps>>
@@ -104,9 +120,25 @@ const Notifications = defineComponent({
       immediate: true,
     })
     return () => {
-      const NodeList = Object.keys(placements.value).map((placement) => {
-        const list = placements.value[placement as Placement] || []
-        return (<></>)
+      const { motion, className, prefixCls, style } = props
+      const NodeList = Object.keys(placements.value).map((placementItem) => {
+        const placement = placementItem as Placement
+        const placementConfigList = placements.value[placement] || []
+        const placementMotion = isFunction(motion) ? motion(placement) : motion
+        const keys = placementConfigList.map(config => ({
+          config,
+          key: config.key,
+        }))
+        return (<CSSMotionList
+            key={placement}
+            class={classNames(prefixCls, `${prefixCls}-${placement}`, className?.(placement as Placement))}
+            style={style?.(placement)}
+            keys={keys}
+            motionAppear
+            {...placementMotion}
+            onAllRemoved={() => onAllNoticeRemoved(placement)}
+          >
+        </CSSMotionList>)
       })
 
       return null

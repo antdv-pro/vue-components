@@ -26,6 +26,8 @@ export interface CSSMotionListProps
   component?: string | object | false
   /** This will always trigger after final visible changed. Even if no motion configured. */
   onVisibleChanged?: (visible: boolean, info: { key: VueKey }) => void
+  /** All motion leaves in the screen */
+  onAllRemoved?: () => void
 }
 
 export interface CSSMotionListState {
@@ -87,14 +89,19 @@ export function genCSSMotionList(
 
       methods: {
         removeKey(removeKey: VueKey) {
-          this.state.keyEntities = this.state.keyEntities.map((entity) => {
+          const { keyEntities } = this.state
+          const nextKeyEntities = keyEntities.map((entity) => {
             if (entity.key !== removeKey) return entity
-
             return {
               ...entity,
               status: STATUS_REMOVED,
             }
           })
+
+          this.state.keyEntities = nextKeyEntities
+
+          return nextKeyEntities.filter(({ status }) => status !== STATUS_REMOVED)
+            .length
         },
       },
 
@@ -102,6 +109,7 @@ export function genCSSMotionList(
         const {
           component,
           onVisibleChanged,
+          onAllRemoved,
           ...motionProps
         }: CSSMotionListProps = this.$props
 
@@ -125,7 +133,10 @@ export function genCSSMotionList(
 
                     if (!changedVisible) {
                       // @ts-expect-error this is a Vue 3 feature
-                      this.removeKey(eventProps.key)
+                      const restKeysCount = this.removeKey(eventProps.key)
+
+                      if (restKeysCount === 0 && onAllRemoved)
+                        onAllRemoved()
                     }
                   }}
                   v-slots={this.$slots}

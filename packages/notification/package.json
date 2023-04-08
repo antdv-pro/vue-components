@@ -19,6 +19,7 @@
   "keywords": [],
   "devDependencies": {
     "vue": "^3.2.47",
-    "@v-c/utils": "workspace:^"
+    "@v-c/utils": "workspace:^",
+    "@v-c/motion": "workspace:^"
   }
 }

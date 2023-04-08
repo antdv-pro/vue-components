@@ -2,9 +2,14 @@
   "name": "@v-c/motion",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "vite build"
   },
   "homepage": "https://github.com/antd-tiny-vue/vue-components",
   "repository": {
