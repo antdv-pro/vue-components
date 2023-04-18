@@ -14,7 +14,6 @@ import { defineComponent, ref, shallowRef, watch } from 'vue'
 import type { CSSMotionProps } from '@v-c/motion'
 import { CSSMotionList } from '@v-c/motion'
 import type { NoticeConfig } from './notice'
-import Notice from './notice'
 export type Key = string | number
 export type OpenConfig = NoticeConfig & {
   key: Key
