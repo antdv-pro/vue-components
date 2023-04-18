@@ -24,6 +24,8 @@ const noticeProps = {
   onNoticeClose: eventType<(key: any) => void>(),
   times: numberType(),
   holder: anyType<HTMLDivElement>(),
+  class: anyType(),
+  style: anyType(),
 }
 export type NoticeConfig = Partial<ExtractPropTypes<typeof noticeProps>>
 const notice = defineComponent({

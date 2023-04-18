@@ -130,13 +130,22 @@ const Notifications = defineComponent({
         }))
         return (<CSSMotionList
             key={placement}
-            class={classNames(prefixCls, `${prefixCls}-${placement}`, className?.(placement as Placement))}
+            class={classNames(prefixCls, `${prefixCls}-${placement}`, className?.(placement))}
             style={style?.(placement)}
             keys={keys}
             motionAppear
             {...placementMotion}
             onAllRemoved={() => onAllNoticeRemoved(placement)}
           >
+          {placementConfigList.map((config) => {
+            const { key, times } = config as InnerOpenConfig
+            const { class: configClassName, style: configStyle } = config as NoticeConfig
+            return (<Notice
+                {...config}
+                prefixCls={prefixCls}
+                class={classNames(configClassName)}
+            />)
+          })}
         </CSSMotionList>)
       })
 
