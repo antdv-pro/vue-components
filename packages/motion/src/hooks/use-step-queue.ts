@@ -1,6 +1,6 @@
 import { useState } from '@v-c/utils'
 import type { Ref } from 'vue'
-import { computed, onBeforeUnmount, watch } from 'vue'
+import { computed, onBeforeUnmount, shallowRef, watch } from 'vue'
 import type { MotionStatus, StepStatus } from '../interface'
 import {
   STEP_ACTIVATED,
@@ -38,8 +38,10 @@ export default (
     step: StepStatus,
   ) => Promise<void> | void | typeof SkipStep | typeof DoStep,
 ): [() => void, Ref<StepStatus>] => {
-  const [step, setStep] = useState<StepStatus>(STEP_NONE)
-
+  const step = shallowRef<StepStatus>(STEP_NONE)
+  const setStep = (value: StepStatus) => {
+    step.value = value
+  }
   const [nextFrame, cancelNextFrame] = useNextFrame()
 
   function startQueue() {
