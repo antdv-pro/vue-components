@@ -9,6 +9,7 @@ import {
   someType,
   stringType,
 } from '@v-c/utils'
+import { useCSSMotionContext } from './context'
 import DomWrapper from './dom-wrapper'
 import useStatus from './hooks/use-status'
 import { isActive } from './hooks/use-step-queue'
@@ -117,7 +118,8 @@ export function genCSSMotion(
     name: 'CSSMotion',
     props: cssMotionProps,
     setup(props, { slots }) {
-      const supportMotion = computed(() => isSupportTransition(props, true))
+      const { motion: motionContext } = useCSSMotionContext()
+      const supportMotion = computed(() => isSupportTransition(props, motionContext.value))
       // console.log(supportMotion)
 
       // Ref to the react node, it may be a HTMLElement

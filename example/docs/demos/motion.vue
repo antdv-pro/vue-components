@@ -128,23 +128,22 @@ const onMotionLeaveImmediately = () => {
     <button type="button" @click="onMotionLeaveImmediately">
       motionLeaveImmediately
     </button>
-
-    <!--    <div> -->
-    <!--      <CSSMotion -->
-    <!--        v-if="state.motionLeaveImmediately" -->
-    <!--        :visible="false" -->
-    <!--        :motion-name="state.hasMotionClass ? 'transition' : null" -->
-    <!--        :remove-on-leave="state.removeOnLeave" -->
-    <!--        leaved-class="hidden" -->
-    <!--        motion-leave-immediately -->
-    <!--        @leave-active="onCollapse" -->
-    <!--        @leave-end="skipColorTransition" -->
-    <!--      > -->
-    <!--        <template #default="props"> -->
-    <!--          <div v-bind="props" class="demo-block" /> -->
-    <!--        </template> -->
-    <!--      </CSSMotion> -->
-    <!--    </div> -->
+    <div>
+      <CSSMotion
+        v-if="state.motionLeaveImmediately"
+        :visible="false"
+        :motion-name="state.hasMotionClass ? 'transition' : null"
+        :remove-on-leave="state.removeOnLeave"
+        leaved-class="hidden"
+        motion-leave-immediately
+        @leave-active="onCollapse"
+        @leave-end="skipColorTransition"
+      >
+        <template #default="props">
+          <div v-bind="props" class="demo-block" />
+        </template>
+      </CSSMotion>
+    </div>
   </div>
 </template>
 

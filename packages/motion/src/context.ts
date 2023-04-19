@@ -1,4 +1,4 @@
-import { classNames, createInjectionState, findDOMNode } from '@v-c/utils'
+import { createInjectionState } from '@v-c/utils'
 import { computed } from 'vue'
 interface MotionContextProps {
   motion?: boolean
@@ -16,5 +16,5 @@ export {
 }
 
 export const useCSSMotionContext = () => useCSSMotionInject() ?? {
-  motion: computed(() => undefined),
+  motion: computed(() => true),
 }
