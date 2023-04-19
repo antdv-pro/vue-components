@@ -74,8 +74,8 @@ export default function useStatus(
   const [patchMotionEvents] = useDomMotionEvents(onInternalMotionEnd)
 
   // ============================= Step =============================
-  const eventHandlers = computed(() => {
-    switch (status.value) {
+  const getEventHandlers = (targetState: MotionStatus) => {
+    switch (targetState) {
       case STATUS_APPEAR:
         return {
           [STEP_PREPARE]: props.onAppearPrepare,
@@ -100,7 +100,8 @@ export default function useStatus(
       default:
         return {}
     }
-  })
+  }
+  const eventHandlers = computed(() => getEventHandlers(status.value))
 
   const [startStep, step] = useStepQueue(status, supportMotion, (newStep) => {
     // Only prepare step can be skip
@@ -167,11 +168,14 @@ export default function useStatus(
             || (!isMounted && props.motionLeaveImmediately && !visible.value && props.motionLeave)
     )
       nextStatus = STATUS_LEAVE
-
+    const nextEventHandlers = getEventHandlers(nextStatus!)
     // Update to next status
-    if (nextStatus!) {
+    if (nextStatus! && (supportMotion.value || nextEventHandlers[STEP_PREPARE])) {
       setStatus(nextStatus)
       startStep()
+    }
+    else {
+      setStatus(STATUS_NONE)
     }
   }, [visible])
 

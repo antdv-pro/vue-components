@@ -1,5 +1,5 @@
 import type { CSSProperties, ExtractPropTypes, Ref, VNodeChild } from 'vue'
-import { Transition, computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import {
   anyType,
   booleanType,
@@ -120,8 +120,6 @@ export function genCSSMotion(
     setup(props, { slots }) {
       const { motion: motionContext } = useCSSMotionContext()
       const supportMotion = computed(() => isSupportTransition(props, motionContext.value))
-      // console.log(supportMotion)
-
       // Ref to the react node, it may be a HTMLElement
       const nodeRef = ref()
 
