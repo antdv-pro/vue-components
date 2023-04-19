@@ -1,6 +1,6 @@
 import { useState } from '@v-c/utils'
 import type { Ref } from 'vue'
-import { onBeforeUnmount } from 'vue'
+import { computed, onBeforeUnmount, watch } from 'vue'
 import type { MotionStatus, StepStatus } from '../interface'
 import {
   STEP_ACTIVATED,
@@ -46,12 +46,11 @@ export default (
     setStep(STEP_PREPARE)
   }
 
-  const STEP_QUEUE = prepareOnly.value ? SIMPLE_STEP_QUEUE : FULL_STEP_QUEUE
-
+  const STEP_QUEUE = computed(() => !prepareOnly.value ? SIMPLE_STEP_QUEUE : FULL_STEP_QUEUE)
   useIsomorphicLayoutEffect(() => {
     if (step.value !== STEP_NONE && step.value !== STEP_ACTIVATED) {
-      const index = STEP_QUEUE.indexOf(step.value)
-      const nextStep = STEP_QUEUE[index + 1]
+      const index = STEP_QUEUE.value.indexOf(step.value)
+      const nextStep = STEP_QUEUE.value[index + 1]
 
       const result = callback(step.value)
 

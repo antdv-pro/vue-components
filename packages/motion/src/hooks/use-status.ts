@@ -1,5 +1,5 @@
 import { useState } from '@v-c/utils'
-import type { CSSProperties, Ref } from 'vue'
+import type { CSSProperties, ComputedRef, Ref } from 'vue'
 import { computed, onBeforeUnmount, shallowRef, watch } from 'vue'
 import type { CSSMotionProps } from '../css-motion'
 import type { MotionEvent, MotionStatus, StepStatus } from '../interface'
@@ -21,27 +21,8 @@ export default function useStatus(
   supportMotion: Ref<boolean>,
   visible: Ref<boolean>,
   getElement: () => HTMLElement | null,
-  {
-    motionEnter = true,
-    motionAppear = true,
-    motionLeave = true,
-    motionDeadline,
-    motionLeaveImmediately,
-    onAppearPrepare,
-    onEnterPrepare,
-    onLeavePrepare,
-    onAppearStart,
-    onEnterStart,
-    onLeaveStart,
-    onAppearActive,
-    onEnterActive,
-    onLeaveActive,
-    onAppearEnd,
-    onEnterEnd,
-    onLeaveEnd,
-    onVisibleChanged,
-  }: CSSMotionProps,
-): [Ref<MotionStatus>, Ref<StepStatus>, Ref<CSSProperties>, Ref<boolean>] {
+  props: CSSMotionProps,
+): [Ref<MotionStatus>, Ref<StepStatus>, ComputedRef<CSSProperties>, Ref<boolean>] {
   // Used for outer render usage to avoid `visible: false & status: none` to render nothing
   const [asyncVisible, setAsyncVisible] = useState<boolean>()
   const [status, setStatus] = useState<MotionStatus>(STATUS_NONE)
@@ -79,11 +60,11 @@ export default function useStatus(
 
     let canEnd: any
     if (status.value === STATUS_APPEAR && currentActive)
-      canEnd = onAppearEnd?.(element, event)
+      canEnd = props.onAppearEnd?.(element, event)
     else if (status.value === STATUS_ENTER && currentActive)
-      canEnd = onEnterEnd?.(element, event)
+      canEnd = props.onEnterEnd?.(element, event)
     else if (status.value === STATUS_LEAVE && currentActive)
-      canEnd = onLeaveEnd?.(element, event)
+      canEnd = props.onLeaveEnd?.(element, event)
 
     // Only update status when `canEnd` and not destroyed
     if (status.value !== STATUS_NONE && currentActive && canEnd !== false)
@@ -97,23 +78,23 @@ export default function useStatus(
     switch (status.value) {
       case STATUS_APPEAR:
         return {
-          [STEP_PREPARE]: onAppearPrepare,
-          [STEP_START]: onAppearStart,
-          [STEP_ACTIVE]: onAppearActive,
+          [STEP_PREPARE]: props.onAppearPrepare,
+          [STEP_START]: props.onAppearStart,
+          [STEP_ACTIVE]: props.onAppearActive,
         }
 
       case STATUS_ENTER:
         return {
-          [STEP_PREPARE]: onEnterPrepare,
-          [STEP_START]: onEnterStart,
-          [STEP_ACTIVE]: onEnterActive,
+          [STEP_PREPARE]: props.onEnterPrepare,
+          [STEP_START]: props.onEnterStart,
+          [STEP_ACTIVE]: props.onEnterActive,
         }
 
       case STATUS_LEAVE:
         return {
-          [STEP_PREPARE]: onLeavePrepare,
-          [STEP_START]: onLeaveStart,
-          [STEP_ACTIVE]: onLeaveActive,
+          [STEP_PREPARE]: props.onLeavePrepare,
+          [STEP_START]: props.onLeaveStart,
+          [STEP_ACTIVE]: props.onLeaveActive,
         }
 
       default:
@@ -139,14 +120,14 @@ export default function useStatus(
       // Patch events when motion needed
       patchMotionEvents(getDomElement())
 
-      if (motionDeadline! > 0) {
+      if (props.motionDeadline! > 0) {
         clearTimeout(deadlineRef.value!)
         // @ts-expect-error this is a bug in typescript
         deadlineRef.value = setTimeout(() => {
           onInternalMotionEnd({
             deadline: true,
           } as MotionEvent)
-        }, motionDeadline)
+        }, props.motionDeadline)
       }
     }
 
@@ -155,8 +136,9 @@ export default function useStatus(
 
     return DoStep
   })
-
-  activeRef.value = isActive(step.value)
+  watch(step, () => {
+    activeRef.value = isActive(step.value)
+  }, { immediate: true })
 
   // ============================ Status ============================
   // Update with new status
@@ -166,24 +148,23 @@ export default function useStatus(
     const isMounted = mountedRef.value
     mountedRef.value = true
 
-    // if (!supportMotion) {
-    //   return;
-    // }
+    if (!supportMotion.value)
+      return
 
     let nextStatus: MotionStatus
 
     // Appear
-    if (!isMounted && visible.value && motionAppear)
+    if (!isMounted && visible.value && props.motionAppear)
       nextStatus = STATUS_APPEAR
 
     // Enter
-    if (isMounted && visible.value && motionEnter)
+    if (isMounted && visible.value && props.motionEnter)
       nextStatus = STATUS_ENTER
 
     // Leave
     if (
-      (isMounted && !visible.value && motionLeave)
-            || (!isMounted && motionLeaveImmediately && !visible.value && motionLeave)
+      (isMounted && !visible.value && props.motionLeave)
+            || (!isMounted && props.motionLeaveImmediately && !visible.value && props.motionLeave)
     )
       nextStatus = STATUS_LEAVE
 
@@ -196,17 +177,17 @@ export default function useStatus(
 
   // ============================ Effect ============================
   // Reset when motion changed
-  watch([motionAppear, motionEnter, motionLeave], () => {
+  watch([() => props.motionAppear, () => props.motionEnter, () => props.motionLeave], () => {
     if (
     // Cancel appear
-      (status.value === STATUS_APPEAR && !motionAppear)
+      (status.value === STATUS_APPEAR && !props.motionAppear)
             // Cancel enter
-            || (status.value === STATUS_ENTER && !motionEnter)
+            || (status.value === STATUS_ENTER && !props.motionEnter)
             // Cancel leave
-            || (status.value === STATUS_LEAVE && !motionLeave)
+            || (status.value === STATUS_LEAVE && !props.motionLeave)
     )
       setStatus(STATUS_NONE)
-  })
+  }, { immediate: true })
   onBeforeUnmount(() => {
     mountedRef.value = false
     clearTimeout(deadlineRef.value!)
@@ -215,26 +196,29 @@ export default function useStatus(
   // Trigger `onVisibleChanged`
   const firstMountChangeRef = shallowRef(false)
   watch([asyncVisible, status], () => {
-    if (asyncVisible)
+    if (asyncVisible.value)
       firstMountChangeRef.value = true
 
-    if (asyncVisible !== undefined && status.value === STATUS_NONE) {
+    if (asyncVisible.value !== undefined && status.value === STATUS_NONE) {
       // Skip first render is invisible since it's nothing changed
-      if (firstMountChangeRef.value || asyncVisible)
-        onVisibleChanged?.(asyncVisible.value)
+      if (firstMountChangeRef.value || asyncVisible.value)
+        props.onVisibleChanged?.(asyncVisible.value)
 
       firstMountChangeRef.value = true
     }
-  })
+  }, { immediate: true })
 
   // ============================ Styles ============================
-  const mergedStyle = shallowRef<CSSProperties>(style.value!)
-  if (eventHandlers.value[STEP_PREPARE] && step.value === STEP_START) {
-    mergedStyle.value = {
-      transition: 'none',
-      ...mergedStyle,
+  const mergedStyle = computed(() => {
+    let mergedStyle = style.value
+    if (eventHandlers.value[STEP_PREPARE] && step.value === STEP_START) {
+      mergedStyle = {
+        transition: 'none',
+        ...mergedStyle,
+      }
     }
-  }
+    return mergedStyle!
+  })
 
   return [status, step, mergedStyle, asyncVisible ?? visible]
 }
