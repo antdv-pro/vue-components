@@ -4,25 +4,23 @@ export const STATUS_ADD = 'add' as const
 export const STATUS_KEEP = 'keep' as const
 export const STATUS_REMOVE = 'remove' as const
 export const STATUS_REMOVED = 'removed' as const
-
 export type DiffStatus =
-  | typeof STATUS_ADD
-  | typeof STATUS_KEEP
-  | typeof STATUS_REMOVE
-  | typeof STATUS_REMOVED
+    | typeof STATUS_ADD
+    | typeof STATUS_KEEP
+    | typeof STATUS_REMOVE
+    | typeof STATUS_REMOVED
 
 export interface KeyObject {
   key: VueKey
   status?: DiffStatus
 }
 
-export function wrapKeyToObject(key: VueKey) {
+export function wrapKeyToObject(key: VueKey | KeyObject) {
   let keyObj: KeyObject
-
   if (key && typeof key === 'object' && 'key' in key)
     keyObj = key
   else
-    keyObj = { key }
+    keyObj = { key: key as VueKey }
 
   return {
     ...keyObj,
@@ -30,7 +28,7 @@ export function wrapKeyToObject(key: VueKey) {
   }
 }
 
-export function parseKeys(keys = []) {
+export function parseKeys(keys: any[] = []) {
   return keys.map(wrapKeyToObject)
 }
 
@@ -42,8 +40,8 @@ export function diffKeys(
   let currentIndex = 0
   const currentLen = currentKeys.length
 
-  const prevKeyObjects = parseKeys(prevKeys as any)
-  const currentKeyObjects = parseKeys(currentKeys as any)
+  const prevKeyObjects = parseKeys(prevKeys)
+  const currentKeyObjects = parseKeys(currentKeys)
 
   // Check prev keys to insert or keep
   prevKeyObjects.forEach((keyObj) => {
@@ -51,7 +49,6 @@ export function diffKeys(
 
     for (let i = currentIndex; i < currentLen; i += 1) {
       const currentKeyObj = currentKeyObjects[i]
-
       if (currentKeyObj.key === keyObj.key) {
         // New added keys should add before current key
         if (currentIndex < i) {
@@ -60,15 +57,12 @@ export function diffKeys(
               .slice(currentIndex, i)
               .map(obj => ({ ...obj, status: STATUS_ADD })),
           )
-
           currentIndex = i
         }
-
         list.push({
           ...currentKeyObj,
           status: STATUS_KEEP,
         })
-
         currentIndex += 1
 
         hit = true
@@ -95,17 +89,14 @@ export function diffKeys(
   }
 
   /**
-   * Merge same key when it remove and add again:
-   *    [1 - add, 2 - keep, 1 - remove] -> [1 - keep, 2 - keep]
-   */
+     * Merge same key when it remove and add again:
+     *    [1 - add, 2 - keep, 1 - remove] -> [1 - keep, 2 - keep]
+     */
   const keys: Record<string, any> = {}
-
   list.forEach(({ key }) => {
     keys[key] = (keys[key] || 0) + 1
   })
-
   const duplicatedKeys = Object.keys(keys).filter(key => keys[key] > 1)
-
   duplicatedKeys.forEach((matchKey) => {
     // Remove `STATUS_REMOVE` node.
     list = list.filter(

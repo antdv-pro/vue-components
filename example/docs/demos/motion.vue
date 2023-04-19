@@ -86,42 +86,59 @@ const onMotionLeaveImmediately = () => {
   <div class="grid">
     <div>
       <h2>With Transition Class</h2>
-      <CSSMotion
-        :visible="state.show"
-        :force-render="state.forceRender"
-        :motion-name="state.hasMotionClass ? 'transition' : null"
-        :remove-on-leave="state.removeOnLeave"
-        leaved-class="hidden"
-        @appear-prepare="state.prepare && forceDelay"
-        @enter-prepare="state.prepare && forceDelay"
-        @appear-start="onCollapse"
-        @enter-start="onCollapse"
-        @leave-active="onCollapse"
-        @enter-end="skipColorTransition"
-        @leave-end="skipColorTransition"
-        @visible-changed="onVisibleChanged"
+      <!--      <CSSMotion -->
+      <!--        :visible="state.show" -->
+      <!--        :force-render="state.forceRender" -->
+      <!--        :motion-name="state.hasMotionClass ? 'transition' : null" -->
+      <!--        :remove-on-leave="state.removeOnLeave" -->
+      <!--        leaved-class-name="hidden" -->
+      <!--        @appear-prepare="state.prepare && forceDelay" -->
+      <!--        @enter-prepare="state.prepare && forceDelay" -->
+      <!--        @appear-start="onCollapse" -->
+      <!--        @enter-start="onCollapse" -->
+      <!--        @leave-active="onCollapse" -->
+      <!--        @enter-end="skipColorTransition" -->
+      <!--        @leave-end="skipColorTransition" -->
+      <!--        @visible-changed="onVisibleChanged" -->
+      <!--      > -->
+      <!--        <Div v-show="state.show" class="demo-block" /> -->
+      <!--      </CSSMotion> -->
+      <Transition
+        appear
+        class="transition"
+        enter-from-class="transition-appear"
+        enter-to-class="transition-enter-active"
+        leave-from-class="transition-leave"
+        leave-to-class="transition-leave-active"
       >
-        <template #default="props">
-          <Div v-bind="props" class="demo-block" />
-        </template>
-      </CSSMotion>
+        <Div v-show="state.show" class="demo-block" />
+      </Transition>
     </div>
 
     <div>
       <h2>With Animation Class</h2>
-
-      <CSSMotion
-        :visible="state.show"
-        :force-render="state.forceRender"
-        :motion-name="state.hasMotionClass ? 'animation' : null"
-        :remove-on-leave="state.removeOnLeave"
-        leaved-class="hidden"
-        @leave-active="styleGreen"
+      <Transition
+        appear
+        class="animation"
+        enter-from-class="animation-appear animation-enter"
+        enter-to-class="animation-appear-active animation-enter-active"
+        leave-from-class="animation-leave"
+        leave-to-class="animation-leave-active"
       >
-        <template #default="props">
-          <div v-bind="props" class="demo-block" />
-        </template>
-      </CSSMotion>
+        <Div v-if="state.show" class="demo-block" />
+      </Transition>
+      <!--          <CSSMotion -->
+      <!--            :visible="state.show" -->
+      <!--            :force-render="state.forceRender" -->
+      <!--            :motion-name="state.hasMotionClass ? 'animation' : null" -->
+      <!--            :remove-on-leave="state.removeOnLeave" -->
+      <!--            leaved-class="hidden" -->
+      <!--            @leave-active="styleGreen" -->
+      <!--          > -->
+      <!--            <template #default="props"> -->
+      <!--              <div v-bind="props" class="demo-block" /> -->
+      <!--            </template> -->
+      <!--          </CSSMotion> -->
     </div>
   </div>
 
@@ -130,22 +147,22 @@ const onMotionLeaveImmediately = () => {
       motionLeaveImmediately
     </button>
 
-    <div>
-      <CSSMotion
-        v-if="state.motionLeaveImmediately"
-        :visible="false"
-        :motion-name="state.hasMotionClass ? 'transition' : null"
-        :remove-on-leave="state.removeOnLeave"
-        leaved-class="hidden"
-        motion-leave-immediately
-        @leave-active="onCollapse"
-        @leave-end="skipColorTransition"
-      >
-        <template #default="props">
-          <div v-bind="props" class="demo-block" />
-        </template>
-      </CSSMotion>
-    </div>
+    <!--    <div> -->
+    <!--      <CSSMotion -->
+    <!--        v-if="state.motionLeaveImmediately" -->
+    <!--        :visible="false" -->
+    <!--        :motion-name="state.hasMotionClass ? 'transition' : null" -->
+    <!--        :remove-on-leave="state.removeOnLeave" -->
+    <!--        leaved-class="hidden" -->
+    <!--        motion-leave-immediately -->
+    <!--        @leave-active="onCollapse" -->
+    <!--        @leave-end="skipColorTransition" -->
+    <!--      > -->
+    <!--        <template #default="props"> -->
+    <!--          <div v-bind="props" class="demo-block" /> -->
+    <!--        </template> -->
+    <!--      </CSSMotion> -->
+    <!--    </div> -->
   </div>
 </template>
 
@@ -172,6 +189,7 @@ const onMotionLeaveImmediately = () => {
     &.transition-appear,
     &.transition-enter {
         opacity: 0;
+        height: 0;
     }
 
     &.transition-appear.transition-appear-active,
@@ -181,6 +199,7 @@ const onMotionLeaveImmediately = () => {
 
     &.transition-leave-active {
         opacity: 0;
+        height:0;
         background: green;
     }
 }
@@ -194,6 +213,8 @@ const onMotionLeaveImmediately = () => {
         animation-name: enter;
         animation-fill-mode: both;
         animation-play-state: paused;
+        opacity: 0;
+        height: 0;
     }
 
     &.animation-appear.animation-appear-active,

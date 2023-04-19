@@ -1,11 +1,11 @@
-import { onBeforeUnmount, ref } from 'vue'
 import { raf } from '@v-c/utils'
+import { onBeforeUnmount, shallowRef } from 'vue'
 
 export default (): [
   (callback: (info: { isCanceled: () => boolean }) => void) => void,
   () => void,
 ] => {
-  const nextFrameRef = ref<number>()
+  const nextFrameRef = shallowRef<number | null >(null)
 
   function cancelNextFrame() {
     raf.cancel(nextFrameRef.value!)

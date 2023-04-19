@@ -1,5 +1,5 @@
 import { canUseDom as canUseDOM } from '@v-c/utils'
-import type { MotionName } from '../CSSMotion'
+import type { MotionName } from '../css-motion'
 
 // ================= Transition =================
 // Event wrapper. Copy from react source code
@@ -35,7 +35,7 @@ export function getVendorPrefixes(domSupport: boolean, win: object) {
   return prefixes
 }
 
-const vendorPrefixes: Record<string, any> = getVendorPrefixes(
+const vendorPrefixes = getVendorPrefixes(
   canUseDOM(),
   typeof window !== 'undefined' ? window : {},
 )
@@ -51,7 +51,7 @@ export function getVendorPrefixedEventName(eventName: string) {
   if (prefixedEventNames[eventName])
     return prefixedEventNames[eventName]
 
-  const prefixMap = vendorPrefixes[eventName]
+  const prefixMap = vendorPrefixes[eventName as keyof typeof vendorPrefixes]
 
   if (prefixMap) {
     const stylePropList = Object.keys(prefixMap)
@@ -60,7 +60,7 @@ export function getVendorPrefixedEventName(eventName: string) {
       const styleProp = stylePropList[i]
       if (
         Object.prototype.hasOwnProperty.call(prefixMap, styleProp)
-        && styleProp in style
+                && styleProp in style
       ) {
         prefixedEventNames[eventName] = prefixMap[styleProp]
         return prefixedEventNames[eventName]
@@ -90,7 +90,7 @@ export function getTransitionName(
     const type = transitionType.replace(/-\w/g, match =>
       match[1].toUpperCase(),
     )
-    return transitionName[type as keyof typeof transitionName]
+    return (transitionName as any)[type]
   }
 
   return `${transitionName}-${transitionType}`
