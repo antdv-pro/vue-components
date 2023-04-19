@@ -106,21 +106,23 @@ function genCSSMotionList(transitionSupport: boolean, CSSMotion = OriginCSSMotio
         state.keyEntities = nextKeyEntities
         return nextKeyEntities.filter(({ status }) => status !== STATUS_REMOVED).length
       }
+      const Component = defineComponent({
+        name: 'CSSMotionList1',
+        inheritAttrs: false,
+        setup(_, { slots, attrs }) {
+          const component = props?.component
+          return () => {
+            if (isString(component)) return h(component, [slots.default?.()])
+            if (component) return h(component, { ...attrs }, slots.default?.())
+            return slots.default?.()
+          }
+        },
+      })
 
       return () => {
         const keyEntities = state.keyEntities
-        const { component, onVisibleChanged, onAllRemoved, ...restProps } = props
-        const Component = defineComponent({
-          name: 'CSSMotionList1',
-          inheritAttrs: false,
-          setup(_, { slots, attrs }) {
-            return () => {
-              if (isString(component)) return h(component, [slots.default?.()])
-              if (component) return h(component, { ...attrs }, slots.default?.())
-              return slots.default?.()
-            }
-          },
-        })
+        const { onVisibleChanged, onAllRemoved, ...restProps } = props
+        delete (restProps as any).component
         const motionProps: CSSMotionProps = {}
         MOTION_PROP_NAMES.forEach((prop) => {
           (motionProps as any)[prop] = (restProps as any)[prop]
@@ -154,7 +156,7 @@ function genCSSMotionList(transitionSupport: boolean, CSSMotion = OriginCSSMotio
                       />
                   )
                 })}
-                </Component>
+            </Component>
         )
       }
     },
