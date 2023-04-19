@@ -31,7 +31,7 @@ export default defineConfig({
     },
     lib: {
       formats: ['es'],
-      entry: 'src/index.ts',
+      entry: 'src/index.tsx',
       name: 'VcMotion',
       fileName: format => `index.${format}.js`,
     },
