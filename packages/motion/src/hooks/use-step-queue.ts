@@ -1,6 +1,5 @@
-import { useState } from '@v-c/utils'
 import type { Ref } from 'vue'
-import { computed, onBeforeUnmount, shallowRef, watch } from 'vue'
+import { computed, onBeforeUnmount, shallowRef } from 'vue'
 import type { MotionStatus, StepStatus } from '../interface'
 import {
   STEP_ACTIVATED,
