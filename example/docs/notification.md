@@ -1,4 +1,4 @@
 # Notification
 
 
-<demo src="./demos/notification.vue"></demo>
+<demo src="./demos/notification-context.vue"></demo>

@@ -1,8 +1,11 @@
-import { type VueKey, eventType, numberType, useState } from '@v-c/utils'
+import { type VueKey, classNames, eventType, functionType, isFunction, numberType, useState } from '@v-c/utils'
 import { someType, stringType, vNodeType } from '@v-c/utils'
-import { type ExtractPropTypes, type VNodeChild, defineComponent, shallowRef, watch } from 'vue'
+import { Teleport, defineComponent, shallowRef, watch } from 'vue'
+import type { CSSProperties, ExtractPropTypes, VNodeChild } from 'vue'
 import type { CSSMotionProps } from '@v-c/motion'
-import { noticeConfig } from './notice'
+import { CSSMotionList } from '@v-c/motion'
+import type { NoticeConfig } from './notice'
+import Notice, { noticeConfig } from './notice'
 
 export type Placement = 'top' | 'topLeft' | 'topRight' | 'bottom' | 'bottomLeft' | 'bottomRight'
 export const openConfig = {
@@ -23,6 +26,8 @@ export const notificationProps = {
   container: someType<HTMLElement | (() => HTMLElement)>([Object, Function]),
   maxCount: numberType(),
   onAllRemoved: eventType<VoidFunction>(),
+  className: functionType<(placement: Placement) => string>(),
+  style: functionType<(placement: Placement) => CSSProperties>(),
 }
 
 type InnerOpenConfig = OpenConfig & { times?: number }
@@ -36,7 +41,7 @@ export interface NotificationsRef {
 const Notification = defineComponent({
   name: 'Notification',
   props: notificationProps,
-  setup(props, { attrs, expose, slots, emit }) {
+  setup(props, { expose }) {
     const [configList, setConfigList] = useState<OpenConfig[]>([])
     // ======================== Close =========================
     const onNoticeClose = (key: VueKey) => {
@@ -93,12 +98,12 @@ const Notification = defineComponent({
       })
 
       // Fill exist placements to avoid empty list causing remove without motion
-      Object.keys(placements).forEach((placement) => {
+      Object.keys(placements.value).forEach((placement) => {
         nextPlacements[placement as Placement] = nextPlacements[placement as Placement] || []
       })
 
       setPlacements(nextPlacements)
-    }, { immediate: true, flush: 'post' })
+    })
 
     // Clean up container if all notices fade out
     const onAllNoticeRemoved = (placement: Placement) => {
@@ -118,7 +123,7 @@ const Notification = defineComponent({
     // Effect tell that placements is empty now
     const emptyRef = shallowRef(false)
     watch(placements, () => {
-      if (Object.keys(placements).length > 0) {
+      if (Object.keys(placements.value).length > 0) {
         emptyRef.value = true
       }
       else if (emptyRef.value) {
@@ -133,11 +138,62 @@ const Notification = defineComponent({
 
     return () => {
       // ======================== Render ========================
-      const { container } = props
+      const { container, motion, prefixCls = 'vc-notification', className, style } = props
       if (!container)
         return null
 
       const placementList = Object.keys(placements.value) as Placement[]
+      const nodes = placementList.map((placement) => {
+        const placementConfigList = placements.value[placement] || []
+        const keys: any[] = placementConfigList.map(config => ({
+          config,
+          key: config.key,
+        }))
+        const placementMotion = isFunction(motion) ? motion(placement) : motion
+        return (
+            <div
+                key={placement}
+                class={classNames(prefixCls, `${prefixCls}-${placement}`, className?.(placement))}
+                style={style?.(placement)}
+            >
+              <CSSMotionList
+                  keys={keys}
+                  motionAppear
+                  {...placementMotion}
+                  onAllRemoved={() => {
+                    onAllNoticeRemoved(placement)
+                  }}
+              >
+                {{
+                  default: ({ config, class: motionClassName, style: motionStyle, ref: nodeRef }: any) => {
+                    const { key, times } = config as InnerOpenConfig
+                    const { class: configClassName, style: configStyle } = config as NoticeConfig
+                    return (
+                        <Notice
+                            {...config}
+                            ref={nodeRef}
+                            prefixCls={prefixCls}
+                            class={classNames(motionClassName, configClassName)}
+                            style={{ ...motionStyle, ...configStyle }}
+                            times={times}
+                            key={key}
+                            eventKey={key}
+                            onNoticeClose={onNoticeClose}
+                        />
+                    )
+                  },
+                }}
+              </CSSMotionList>
+            </div>
+
+        )
+      })
+      const holder = (isFunction(container) ? container() : container) ?? 'body'
+      return (
+        <Teleport to={holder}>
+            {nodes}
+        </Teleport>
+      )
     }
   },
 })

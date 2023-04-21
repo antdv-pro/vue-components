@@ -13,6 +13,7 @@ export default defineConfig({
     alias: {
       '@v-c/checkbox': resolve(dir, '../../packages/checkbox/src'),
       '@v-c/utils': resolve(dir, '../../packages/utils/src'),
+      '@v-c/motion': resolve(dir, '../../packages/motion/src'),
     },
   },
   server: {

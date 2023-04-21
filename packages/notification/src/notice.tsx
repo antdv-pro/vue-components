@@ -1,6 +1,7 @@
 import type { VueKey } from '@v-c/utils'
 import {
   KeyCode,
+  anyType,
   booleanType,
   classNames,
   eventType,
@@ -8,21 +9,22 @@ import {
   numberType,
   objectType,
   omit,
-  someType,
-  stringType, useState, vNodeType,
+  someType, stringType, useState, vNodeType,
 } from '@v-c/utils'
 import type { ExtractPropTypes, HTMLAttributes, VNodeChild } from 'vue'
 import { defineComponent, onBeforeUnmount, watch } from 'vue'
 
 export const noticeConfig = {
   content: vNodeType<VNodeChild | (() => VNodeChild)>(),
-  duration: numberType(),
-  closeIcon: vNodeType<VNodeChild | (() => VNodeChild)>(),
+  duration: numberType(4.5),
+  closeIcon: someType<VNodeChild | string | (() => VNodeChild)>([String, Function, Object], 'x'),
   closable: booleanType(),
   /** @private Internal usage. Do not override in your code */
   props: objectType<HTMLAttributes & Record<string, any>>(),
   onClose: eventType<VoidFunction>(),
   onClick: eventType<(e: MouseEvent) => void>(),
+  class: anyType(),
+  style: anyType(),
 }
 
 export type NoticeConfig = Partial<ExtractPropTypes<typeof noticeConfig>>
@@ -57,8 +59,8 @@ const Notify = defineComponent({
 
     let timeout: any
     // ======================== Effect ========================
-    watch([() => props.duration, () => hovering, () => props.times], () => {
-      if (!hovering && props.duration > 0) {
+    watch([() => props.duration, () => hovering.value, () => props.times], () => {
+      if (!hovering.value && props.duration > 0) {
         timeout = setTimeout(() => {
           onInternalClose()
         }, props.duration * 1000)
@@ -76,7 +78,7 @@ const Notify = defineComponent({
       // ======================== Render ========================
       const { prefixCls, props: divProps, closable, onClick, content, closeIcon } = props
       const noticePrefixCls = `${prefixCls}-notice`
-      const divCls = classNames(noticePrefixCls, attrs.class, {
+      const divCls = classNames(noticePrefixCls, props.class, {
         [`${noticePrefixCls}-closable`]: closable,
       })
       return (
@@ -84,6 +86,7 @@ const Notify = defineComponent({
          {...attrs}
          {...divProps}
          class={divCls}
+         style={props.style}
          onMouseenter={() => {
            setHovering(true)
          }}

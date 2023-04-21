@@ -18,6 +18,8 @@ export const useState = <T = any>(defaultValue?: T | (() => T)): [Ref<T>, SetSta
   const state = ref()
   if (isFunction(defaultValue))
     state.value = defaultValue()
+  else
+    state.value = defaultValue
 
   onMounted(() => {
     destroyRef.value = false
