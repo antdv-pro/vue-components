@@ -42,3 +42,19 @@ export const get = (obj: Record<string, any>, key: string): any => {
   }
   return info
 }
+
+export const getArr = (
+  entity: any,
+  path: (string | number)[] | readonly (string | number)[],
+) => {
+  let current = entity
+
+  for (let i = 0; i < path.length; i += 1) {
+    if (current === null || current === undefined)
+      return undefined
+
+    current = current[path[i]]
+  }
+
+  return current
+}
