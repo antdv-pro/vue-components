@@ -1,6 +1,6 @@
 {
   "name": "@v-c/utils",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "description": "vue components utils",
   "keywords": [
     "vc-utils",
@@ -21,6 +21,16 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
+    },
+    "./*": {
+        "import": "./dist/**/*.js",
+        "require": "./dist/**/*.cjs",
+        "types": "./dist/**/*.d.ts"
+    },
+    "./dist/*": {
+        "import": "./dist/**/*.js",
+        "require": "./dist/**/*.cjs",
+        "types": "./dist/**/*.d.ts"
     },
     "./package.json": "./package.json"
   },
@@ -43,6 +53,7 @@
     "@types/lodash.isequal": "^4.5.6",
     "@types/lodash.merge": "^4.6.7",
     "@types/node": "^18.15.11",
+    "fast-glob": "^3.3.1",
     "tsup": "^6.7.0"
   },
   "dependencies": {
